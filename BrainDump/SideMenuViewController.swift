@@ -53,19 +53,18 @@ class SideMenuViewController: UIViewController {
     
     switch text {
       case "Home":
-        currentViewController.navigationController?.setViewControllers([viewControllers[0]], animated: true)
+        if viewControllers[0] != currentViewController {
+          currentViewController.navigationController?.setViewControllers([viewControllers[0]], animated: true)
+        }
         break
       case "Tasks":
-        currentViewController.navigationController?.setViewControllers([viewControllers[1]], animated: true)
+        if viewControllers[1] != currentViewController {
+          currentViewController.navigationController?.setViewControllers([viewControllers[1]], animated: true)
+        }
         break
       default: break
     }
     
-  }
-  
-  override func didReceiveMemoryWarning() {
-    super.didReceiveMemoryWarning()
-    // Dispose of any resources that can be recreated.
   }
   
 }

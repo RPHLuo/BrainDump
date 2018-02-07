@@ -14,10 +14,6 @@ class IdeasViewController: UIViewController {
   let tableview = UITableView()
   var model = [NSManagedObject]()
   
-  var appDelegate:AppDelegate!
-  var managedContext:NSManagedObjectContext!
-  
-  
   override func viewDidLoad() {
     super.viewDidLoad()
     // Do any additional setup after loading the view.
@@ -26,20 +22,8 @@ class IdeasViewController: UIViewController {
   override func viewDidAppear(_ animated: Bool) {
     super.viewDidAppear(animated)
     
-    //Set up Persistence
-    if let delegate = UIApplication.shared.delegate as? AppDelegate {
-      self.appDelegate = delegate
-      managedContext = appDelegate.persistentContainer.viewContext
-      let fetchRequest = NSFetchRequest<NSManagedObject>(entityName: "Task")
-      do {
-        model = try managedContext.fetch(fetchRequest)
-        tableview.reloadData()
-      } catch let e as NSError {
-        print("\(e)")
-      }
-    } else {
-      //Persistence does not work
-    }
+    model = CoreDataManager.shared.retrieveTasks()
+    tableview.reloadData()
     
     
     

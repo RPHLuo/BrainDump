@@ -15,8 +15,6 @@ class MainViewController: UIViewController {
   let titleView = UILabel()
   let taskTitle = UITextField()
   let submit = UIButton()
-  var appDelegate:AppDelegate!
-  var managedContext:NSManagedObjectContext!
   let sideMenu = SideMenuViewController()
   
   override func viewDidLoad() {
@@ -29,14 +27,6 @@ class MainViewController: UIViewController {
     SideMenuManager.menuLeftNavigationController = menuLeftNavigationController
     SideMenuManager.menuAddPanGestureToPresent(toView: self.navigationController!.navigationBar)
     SideMenuManager.menuAddScreenEdgePanGesturesToPresent(toView: self.navigationController!.view)
-    
-    //Set up Persistence
-    if let delegate = UIApplication.shared.delegate as? AppDelegate {
-      self.appDelegate = delegate
-      managedContext = appDelegate.persistentContainer.viewContext
-    } else {
-      //Persistence does not work
-    }
     
     titleView.text = "Store your ideas!"
     titleView.adjustsFontSizeToFitWidth = true
@@ -71,11 +61,12 @@ class MainViewController: UIViewController {
       submit.widthAnchor.constraint(equalTo: taskTitle.widthAnchor, multiplier: 1)
       ])
     submit.addTarget(self, action: #selector(enterIntoDatabase(_:)), for: .touchUpInside)
+    
   }
   
   @objc func enterIntoDatabase(_ sender: UIGestureRecognizer) {
     if let task = taskTitle.text {
-      saveTask(title: task)
+      CoreDataManager.shared.saveTask(title: task)
     }
   }
   
@@ -86,36 +77,3 @@ class MainViewController: UIViewController {
   
   
 }
-
-//:MARK PERSISTENCE
-extension MainViewController {
-  func saveTask(title:String) {
-    guard let entity = NSEntityDescription.entity(forEntityName: "Task", in: managedContext) else { return }
-    let task = NSManagedObject(entity: entity, insertInto: managedContext)
-    let currentDate = Date()
-    task.setValue(title, forKey: "title")
-    task.setValue(1, forKey: "repeats")
-    task.setValue(currentDate, forKey: "dateCreated")
-    task.setValue(currentDate, forKey: "dateModified")
-    do {
-      try managedContext.save()
-    } catch {
-      print("could not save")
-    }
-  }
-  
-  func saveTag(title:String) {
-    guard let entity = NSEntityDescription.entity(forEntityName: "Tag", in: managedContext) else { return }
-    let task = NSManagedObject(entity: entity, insertInto: managedContext)
-    task.setValue("", forKey: "title")
-    
-    
-    do {
-      try managedContext.save()
-      
-    } catch {
-      print("could not save")
-    }
-  }
-}
-
