@@ -28,6 +28,12 @@ class MainViewController: UIViewController {
     SideMenuManager.menuAddPanGestureToPresent(toView: self.navigationController!.navigationBar)
     SideMenuManager.menuAddScreenEdgePanGesturesToPresent(toView: self.navigationController!.view)
     
+    let menuIcon = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(self.openSideMenu))
+    //menuIcon.setIcon(icon: .fontAwesome(.bars), iconSize: 30)
+    menuIcon.setIcon(icon: .fontAwesome(.bars), iconSize: 30, color: .blue, cgRect: CGRect(x: 0, y: 0, width: 30, height: 30), target: self, action: #selector(self.openSideMenu))
+
+    navigationItem.leftBarButtonItem = menuIcon
+    
     titleView.text = "Store your ideas!"
     titleView.adjustsFontSizeToFitWidth = true
     titleView.font = titleView.font.withSize(64)
@@ -66,14 +72,20 @@ class MainViewController: UIViewController {
   
   @objc func enterIntoDatabase(_ sender: UIGestureRecognizer) {
     if let task = taskTitle.text {
-      CoreDataManager.shared.saveTask(title: task)
-      taskTitle.text = ""
+      if (task != "") {
+        CoreDataManager.shared.saveTask(title: task)
+        taskTitle.text = ""
+      }
     }
   }
   
   override func didReceiveMemoryWarning() {
     super.didReceiveMemoryWarning()
     // Dispose of any resources that can be recreated.
+  }
+  
+  @objc func openSideMenu() {
+    present(SideMenuManager.menuLeftNavigationController!, animated: true, completion: nil)
   }
   
   

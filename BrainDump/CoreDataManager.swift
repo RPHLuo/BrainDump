@@ -76,4 +76,16 @@ class CoreDataManager {
     }
   }
   
+  //MARK: TESTING
+  func deleteTasksData() {
+    let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "Task")
+    let deleteRequest = NSBatchDeleteRequest(fetchRequest: fetchRequest)
+    do {
+      try managedContext.execute(deleteRequest)
+      try managedContext.save()
+    } catch let e as NSError {
+      print("\(e)")
+    }
+  }
+  
 }

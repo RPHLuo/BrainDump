@@ -1,12 +1,15 @@
 PODS:
   - SideMenu (3.0.2)
+  - SwiftIcons (2.0.1)
 
 DEPENDENCIES:
   - SideMenu
+  - SwiftIcons (~> 2.0.1)
 
 SPEC CHECKSUMS:
   SideMenu: 8fe957e0f5dcf1a1175c8ba5d47978d4eb2a89da
+  SwiftIcons: e475a56ae2c2da40672dbf16061ca5dd5cee7dbb
 
-PODFILE CHECKSUM: 418874a7f2c1224d86e68ab775bf3feb8fbf5bb1
+PODFILE CHECKSUM: a44bd377df46267b5077c7873c53b99511a6d113
 
-COCOAPODS: 1.2.1
+COCOAPODS: 1.4.0

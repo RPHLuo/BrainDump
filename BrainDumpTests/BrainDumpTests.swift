@@ -10,27 +10,52 @@ import XCTest
 @testable import BrainDump
 
 class BrainDumpTests: XCTestCase {
-    
-    override func setUp() {
-        super.setUp()
-        // Put setup code here. This method is called before the invocation of each test method in the class.
+  
+  override func setUp() {
+    super.setUp()
+    CoreDataManager.shared.deleteTasksData()
+    assert(CoreDataManager.shared.retrieveTasks().count==0)
+  }
+  
+  override func tearDown() {
+    CoreDataManager.shared.deleteTasksData()
+    super.tearDown()
+  }
+  
+  func testCoreData() {
+    let coreDataManager = CoreDataManager.shared
+    guard (coreDataManager.taskEntity != nil) else {
+      assert(false)
     }
     
-    override func tearDown() {
-        // Put teardown code here. This method is called after the invocation of each test method in the class.
-        super.tearDown()
+    coreDataManager.saveTask(title: "Task 1")
+    coreDataManager.saveTask(title: "Task 2")
+    coreDataManager.saveTask(title: "Task 1")
+    coreDataManager.saveTask(title: "Task 3")
+    coreDataManager.saveTask(title: "Task 2")
+    coreDataManager.saveTask(title: "Task 1")
+    let tasks = coreDataManager.retrieveTasks()
+    assert(tasks.count == 3)
+    for task in tasks {
+      guard let title = task.value(forKey: "title") as? String,
+      let repeats = task.value(forKey: "repeats") as? Int else {
+        assert(false)
+        break
+      }
+      switch (title) {
+      case "Task 1":
+        assert(repeats == 3)
+        break
+      case "Task 2":
+        assert(repeats == 2)
+        break
+      case "Task 3":
+        assert(repeats == 1)
+        break
+      default:
+        assert(false)
+        break
+      }
     }
-    
-    func testExample() {
-        // This is an example of a functional test case.
-        // Use XCTAssert and related functions to verify your tests produce the correct results.
-    }
-    
-    func testPerformanceExample() {
-        // This is an example of a performance test case.
-        self.measure {
-            // Put the code you want to measure the time of here.
-        }
-    }
-    
+  }
 }

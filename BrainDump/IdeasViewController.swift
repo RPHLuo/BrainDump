@@ -8,6 +8,7 @@
 
 import UIKit
 import CoreData
+import SwiftIcons
 
 class IdeasViewController: UIViewController {
   
