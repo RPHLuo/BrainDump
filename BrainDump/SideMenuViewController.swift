@@ -53,14 +53,20 @@ class SideMenuViewController: UIViewController {
     
     switch text {
       case "Home":
-        if viewControllers[0] != currentViewController {
-          currentViewController.navigationController?.setViewControllers([viewControllers[0]], animated: true)
-        }
+        dismiss(animated: true, completion: {() in
+          if self.viewControllers[0] != self.currentViewController {
+            self.currentViewController.navigationController?.setViewControllers([self.viewControllers[0]], animated: false)
+            self.currentViewController = self.viewControllers[0]
+          }
+        })
         break
       case "Tasks":
-        if viewControllers[1] != currentViewController {
-          currentViewController.navigationController?.setViewControllers([viewControllers[1]], animated: true)
-        }
+        dismiss(animated: true, completion: {() in
+          if self.self.viewControllers[1] != self.currentViewController {
+            self.currentViewController.navigationController?.setViewControllers([self.viewControllers[1]], animated: false)
+            self.currentViewController = self.viewControllers[1]
+          }
+        })
         break
       default: break
     }

@@ -30,18 +30,39 @@ class CoreDataManager {
   //TODO check if data exists. if it does then simply update it
   //Save Task
   func saveTask(title: String) {
-    let task = NSManagedObject(entity: taskEntity, insertInto: managedContext)
-    let currentDate = Date()
-    task.setValue(title, forKey: "title")
-    task.setValue(1, forKey: "repeats")
-    task.setValue(currentDate, forKey: "dateCreated")
-    task.setValue(currentDate, forKey: "dateModified")
+    if let task = findTask(title: title) {
+      if let repeats = task.value(forKey: "repeats") as? Int {
+        task.setValue(repeats+1, forKey: "repeats")
+      }
+      task.setValue(Date(), forKey: "dateModified")
+    } else {
+      let task = NSManagedObject(entity: taskEntity, insertInto: managedContext)
+      let currentDate = Date()
+      task.setValue(title, forKey: "title")
+      task.setValue(1, forKey: "repeats")
+      task.setValue(currentDate, forKey: "dateCreated")
+      task.setValue(currentDate, forKey: "dateModified")
+    }
     do {
       try managedContext.save()
     } catch let e as NSError {
       print("\(e)")
     }
   }
+  
+  //Finds the task if it exists
+  func findTask(title: String) -> NSManagedObject? {
+    let tasks = retrieveTasks()
+    for task in tasks {
+      if let currTitle = task.value(forKey: "title") as? String{
+        if currTitle == title {
+          return task
+        }
+      }
+    }
+    return nil
+  }
+  
   
   //Get Tasks from Core Data
   func retrieveTasks() -> [NSManagedObject] {

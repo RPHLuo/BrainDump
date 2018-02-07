@@ -67,6 +67,7 @@ class MainViewController: UIViewController {
   @objc func enterIntoDatabase(_ sender: UIGestureRecognizer) {
     if let task = taskTitle.text {
       CoreDataManager.shared.saveTask(title: task)
+      taskTitle.text = ""
     }
   }
   
