@@ -27,12 +27,12 @@ class StatisticsViewController: UIViewController {
     
     //Set up menu button
     let menuIcon = UIBarButtonItem()
-    menuIcon.setIcon(icon: .fontAwesome(.bars), iconSize: 30, color: UIColor(red: 0.5, green: 0.6, blue: 1, alpha: 1), cgRect: CGRect(x: 0, y: 0, width: 30, height: 30), target: self, action: #selector(self.openSideMenu))
+    menuIcon.setIcon(icon: .fontAwesome(.bars), iconSize: 30, color: ColorScheme.secondaryColor, cgRect: CGRect(x: 0, y: 0, width: 30, height: 30), target: self, action: #selector(self.openSideMenu))
     navigationItem.leftBarButtonItem = menuIcon
     
-    tableview.backgroundColor = UIColor(red: 0.5, green: 0.6, blue: 1, alpha: 1)
-    search.backgroundColor = UIColor(red: 0.5, green: 0.6, blue: 1, alpha: 1)
-    upload.backgroundColor = UIColor(red: 0.5, green: 0.6, blue: 1, alpha: 1)
+    tableview.backgroundColor = ColorScheme.secondaryColor
+    search.backgroundColor = ColorScheme.secondaryColor
+    upload.backgroundColor = ColorScheme.secondaryColor
     tableview.dataSource = self
     
     view.addSubview(tableview)
@@ -70,19 +70,17 @@ class StatisticsViewController: UIViewController {
   }
   
   @objc func filter() {
-    
+    //TODO: filter the tasks by name
   }
   
   @objc func uploadTasks() {
     let tasks = CoreDataManager.shared.retrieveTasks()
     for task in tasks {
       guard let title = task.value(forKey: "title") as? String,
-      let repeats = task.value(forKey: "repeats") as? Int else { return }
-      GraphQLManager.shared.uploadTasks(title: title)
+        let repeats = task.value(forKey: "repeats") as? Int else { return }
+      GraphQLManager.shared.uploadTask(title: title, repeats: repeats)
     }
-    DispatchQueue.main.asyncAfter(deadline: .now() + 2, execute: {() in
-      GraphQLManager.shared.getTasks(handler: self)
-    })
+    GraphQLManager.shared.getTasks(handler: self)
     CoreDataManager.shared.deleteTasksData()
   }
   
@@ -95,7 +93,7 @@ extension StatisticsViewController: UITableViewDataSource {
   
   func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
     let cell = UITableViewCell(style: .value1, reuseIdentifier: "cell")
-    cell.backgroundColor = UIColor(red: 0.5, green: 0.6, blue: 1, alpha: 1)
+    cell.backgroundColor = ColorScheme.secondaryColor
     var task = model[indexPath.row]
     cell.textLabel?.text = task.title
     guard let repeats = task.repeats else { return cell }

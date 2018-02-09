@@ -19,18 +19,18 @@ class SideMenuViewController: UIViewController {
   override func viewDidLoad() {
     super.viewDidLoad()
     navigationController?.navigationBar.isTranslucent = false
-    navigationController?.navigationBar.barTintColor = UIColor(red: 0.2, green: 0.25, blue: 0.7, alpha: 1)
+    navigationController?.navigationBar.barTintColor = ColorScheme.mainColor
     
     home.setTitle("Home", for: .normal)
-    home.setTitleColor(UIColor(red: 0.15, green: 0.2, blue: 0.4, alpha: 1), for: .normal)
+    home.setTitleColor(ColorScheme.textColor, for: .normal)
     tasks.setTitle("Tasks", for: .normal)
-    tasks.setTitleColor(UIColor(red: 0.15, green: 0.2, blue: 0.4, alpha: 1), for: .normal)
+    tasks.setTitleColor(ColorScheme.textColor, for: .normal)
     statistics.setTitle("Statistics", for: .normal)
-    statistics.setTitleColor(UIColor(red: 0.15, green: 0.2, blue: 0.4, alpha: 1), for: .normal)
+    statistics.setTitleColor(ColorScheme.textColor, for: .normal)
     
-    home.backgroundColor = UIColor(red: 0.5, green: 0.6, blue: 1, alpha: 1)
-    tasks.backgroundColor = UIColor(red: 0.5, green: 0.6, blue: 1, alpha: 1)
-    statistics.backgroundColor = UIColor(red: 0.5, green: 0.6, blue: 1, alpha: 1)
+    home.backgroundColor = ColorScheme.secondaryColor
+    tasks.backgroundColor = ColorScheme.secondaryColor
+    statistics.backgroundColor = ColorScheme.secondaryColor
     
     view.addSubview(home)
     view.addSubview(tasks)
@@ -65,6 +65,7 @@ class SideMenuViewController: UIViewController {
       return
     }
     
+    //Select the view controllers
     switch text {
     case "Home":
       dismiss(animated: true, completion: {() in

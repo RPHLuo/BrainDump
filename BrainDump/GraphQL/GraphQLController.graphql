@@ -6,10 +6,9 @@ mutation createTask($title: String!, $repeats: Int!) {
   }
 }
 
-mutation updateTaskRepeats($id: ID!, $repeats: Int!) {
-  updateTask(id: $id, repeats: $repeats) {
-    id
-    repeats
+mutation updateTaskRepeats($id: ID!, $title: String!, $repeats: Int!) {
+updateTask(id: $id, title: $title, repeats: $repeats) {
+    ...TaskInformation
   }
 }
 

@@ -10,6 +10,12 @@ import UIKit
 import CoreData
 import SideMenu
 
+struct ColorScheme {
+  static let mainColor = UIColor(red: 0.2, green: 0.25, blue: 0.7, alpha: 1)
+  static let secondaryColor = UIColor(red: 0.5, green: 0.6, blue: 1, alpha: 1)
+  static let textColor = UIColor(red: 0.15, green: 0.2, blue: 0.4, alpha: 1)
+}
+
 class MainViewController: UIViewController {
   
   let titleView = UILabel()
@@ -30,7 +36,7 @@ class MainViewController: UIViewController {
     
     //Set up menu button
     let menuIcon = UIBarButtonItem()
-    menuIcon.setIcon(icon: .fontAwesome(.bars), iconSize: 30, color: UIColor(red: 0.5, green: 0.6, blue: 1, alpha: 1), cgRect: CGRect(x: 0, y: 0, width: 30, height: 30), target: self, action: #selector(self.openSideMenu))
+    menuIcon.setIcon(icon: .fontAwesome(.bars), iconSize: 30, color: ColorScheme.secondaryColor, cgRect: CGRect(x: 0, y: 0, width: 30, height: 30), target: self, action: #selector(self.openSideMenu))
     navigationItem.leftBarButtonItem = menuIcon
     
     titleView.text = "Store your ideas!"
@@ -75,11 +81,6 @@ class MainViewController: UIViewController {
         taskTitle.text = ""
       }
     }
-  }
-  
-  override func didReceiveMemoryWarning() {
-    super.didReceiveMemoryWarning()
-    // Dispose of any resources that can be recreated.
   }
   
   @objc func openSideMenu() {

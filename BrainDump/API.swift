@@ -105,25 +105,29 @@ public final class CreateTaskMutation: GraphQLMutation {
 
 public final class UpdateTaskRepeatsMutation: GraphQLMutation {
   public static let operationString =
-    "mutation updateTaskRepeats($id: ID!, $repeats: Int!) {\n  updateTask(id: $id, repeats: $repeats) {\n    __typename\n    id\n    repeats\n  }\n}"
+    "mutation updateTaskRepeats($id: ID!, $title: String!, $repeats: Int!) {\n  updateTask(id: $id, title: $title, repeats: $repeats) {\n    __typename\n    ...TaskInformation\n  }\n}"
+
+  public static var requestString: String { return operationString.appending(TaskInformation.fragmentString) }
 
   public var id: GraphQLID
+  public var title: String
   public var repeats: Int
 
-  public init(id: GraphQLID, repeats: Int) {
+  public init(id: GraphQLID, title: String, repeats: Int) {
     self.id = id
+    self.title = title
     self.repeats = repeats
   }
 
   public var variables: GraphQLMap? {
-    return ["id": id, "repeats": repeats]
+    return ["id": id, "title": title, "repeats": repeats]
   }
 
   public struct Data: GraphQLSelectionSet {
     public static let possibleTypes = ["Mutation"]
 
     public static let selections: [GraphQLSelection] = [
-      GraphQLField("updateTask", arguments: ["id": GraphQLVariable("id"), "repeats": GraphQLVariable("repeats")], type: .object(UpdateTask.selections)),
+      GraphQLField("updateTask", arguments: ["id": GraphQLVariable("id"), "title": GraphQLVariable("title"), "repeats": GraphQLVariable("repeats")], type: .object(UpdateTask.selections)),
     ]
 
     public var snapshot: Snapshot
@@ -150,7 +154,9 @@ public final class UpdateTaskRepeatsMutation: GraphQLMutation {
 
       public static let selections: [GraphQLSelection] = [
         GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+        GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
         GraphQLField("id", type: .nonNull(.scalar(GraphQLID.self))),
+        GraphQLField("title", type: .nonNull(.scalar(String.self))),
         GraphQLField("repeats", type: .scalar(Int.self)),
       ]
 
@@ -160,8 +166,8 @@ public final class UpdateTaskRepeatsMutation: GraphQLMutation {
         self.snapshot = snapshot
       }
 
-      public init(id: GraphQLID, repeats: Int? = nil) {
-        self.init(snapshot: ["__typename": "Task", "id": id, "repeats": repeats])
+      public init(id: GraphQLID, title: String, repeats: Int? = nil) {
+        self.init(snapshot: ["__typename": "Task", "id": id, "title": title, "repeats": repeats])
       }
 
       public var __typename: String {
@@ -182,12 +188,43 @@ public final class UpdateTaskRepeatsMutation: GraphQLMutation {
         }
       }
 
+      public var title: String {
+        get {
+          return snapshot["title"]! as! String
+        }
+        set {
+          snapshot.updateValue(newValue, forKey: "title")
+        }
+      }
+
       public var repeats: Int? {
         get {
           return snapshot["repeats"] as? Int
         }
         set {
           snapshot.updateValue(newValue, forKey: "repeats")
+        }
+      }
+
+      public var fragments: Fragments {
+        get {
+          return Fragments(snapshot: snapshot)
+        }
+        set {
+          snapshot += newValue.snapshot
+        }
+      }
+
+      public struct Fragments {
+        public var snapshot: Snapshot
+
+        public var taskInformation: TaskInformation {
+          get {
+            return TaskInformation(snapshot: snapshot)
+          }
+          set {
+            snapshot += newValue.snapshot
+          }
         }
       }
     }

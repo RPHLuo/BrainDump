@@ -11,22 +11,20 @@ import Apollo
 
 class GraphQLManager {
   let apollo = ApolloClient(url: URL(string: "https://api.graph.cool/simple/v1/cjddwa90359su0103b36ezi2i")!)
-  
-  
   static let shared = GraphQLManager()
- 
-  func uploadTasks(title: String) {
-    let createTask = CreateTaskMutation(title: title, repeats: 1)
-    apollo.perform(mutation: createTask)
-  }
   
-  func updateTask(title: String, repeats: Int) {
+  func uploadTask(title: String, repeats: Int) {
     let findTaskQuery = TitleTaskQuery(title: title)
     apollo.fetch(query: findTaskQuery) {
       result, error in
-      guard let task = result?.data?.task else { return }
-      let updateTask = UpdateTaskRepeatsMutation(id: task.id, repeats: repeats)
-      self.apollo.perform(mutation: updateTask)
+      if let task = result?.data?.task {
+        guard let queryTaskRepeats = task.repeats else { return }
+        let updateTask = UpdateTaskRepeatsMutation(id: task.id, title: title, repeats: repeats + queryTaskRepeats)
+        self.apollo.perform(mutation: updateTask)
+      } else {
+        let createTask = CreateTaskMutation(title: title, repeats: repeats)
+        self.apollo.perform(mutation: createTask)
+      }
     }
   }
   
