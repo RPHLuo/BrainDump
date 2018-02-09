@@ -17,10 +17,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
   func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
     
     window = UIWindow(frame: UIScreen.main.bounds)
-    window!.backgroundColor = UIColor.white
+    window!.backgroundColor = UIColor(red: 0.2, green: 0.25, blue: 0.7, alpha: 1)
     let rootViewController = MainViewController()
     let rootNavigationController = UINavigationController(rootViewController: rootViewController)
     rootNavigationController.navigationBar.isTranslucent = false
+    rootNavigationController.navigationBar.barTintColor = UIColor(red: 0.2, green: 0.25, blue: 0.7, alpha: 1)
     window!.rootViewController = rootNavigationController
     window!.makeKeyAndVisible()
     return true

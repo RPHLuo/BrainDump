@@ -1,0 +1,34 @@
+mutation createTask($title: String!, $repeats: Int!) {
+  createTask(title: $title, repeats: $repeats) {
+    id
+    title
+    repeats
+  }
+}
+
+mutation updateTaskRepeats($id: ID!, $repeats: Int!) {
+  updateTask(id: $id, repeats: $repeats) {
+    id
+    repeats
+  }
+}
+
+fragment TaskInformation on Task {
+  id
+  title
+  repeats
+}
+
+query AllTasks {
+  allTasks {
+    ...TaskInformation
+  }
+}
+
+query TitleTask($title: String!) {
+  Task(title: $title) {
+    id
+    title
+    repeats
+  }
+}

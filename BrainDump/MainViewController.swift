@@ -21,28 +21,27 @@ class MainViewController: UIViewController {
     super.viewDidLoad()
     
     //Set up SideMenu
-    sideMenu.viewControllers = [self, IdeasViewController()]
+    sideMenu.viewControllers = [self, TasksViewController(), StatisticsViewController()]
     sideMenu.currentViewController = self
     let menuLeftNavigationController = UISideMenuNavigationController(rootViewController: sideMenu)
     SideMenuManager.menuLeftNavigationController = menuLeftNavigationController
     SideMenuManager.menuAddPanGestureToPresent(toView: self.navigationController!.navigationBar)
     SideMenuManager.menuAddScreenEdgePanGesturesToPresent(toView: self.navigationController!.view)
     
-    let menuIcon = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(self.openSideMenu))
-    //menuIcon.setIcon(icon: .fontAwesome(.bars), iconSize: 30)
-    menuIcon.setIcon(icon: .fontAwesome(.bars), iconSize: 30, color: .blue, cgRect: CGRect(x: 0, y: 0, width: 30, height: 30), target: self, action: #selector(self.openSideMenu))
-
+    //Set up menu button
+    let menuIcon = UIBarButtonItem()
+    menuIcon.setIcon(icon: .fontAwesome(.bars), iconSize: 30, color: UIColor(red: 0.5, green: 0.6, blue: 1, alpha: 1), cgRect: CGRect(x: 0, y: 0, width: 30, height: 30), target: self, action: #selector(self.openSideMenu))
     navigationItem.leftBarButtonItem = menuIcon
     
     titleView.text = "Store your ideas!"
     titleView.adjustsFontSizeToFitWidth = true
     titleView.font = titleView.font.withSize(64)
     titleView.textAlignment = .center
-    
     taskTitle.borderStyle = .roundedRect
-    submit.tintColor = .black
-    submit.setTitleColor(.red, for: .normal)
+    submit.setTitleColor(.black, for: .normal)
     submit.setTitle("Submit", for: .normal)
+    
+    submit.addTarget(self, action: #selector(enterIntoDatabase(_:)), for: .touchUpInside)
     
     view.addSubview(titleView)
     view.addSubview(taskTitle)
@@ -66,7 +65,6 @@ class MainViewController: UIViewController {
       submit.heightAnchor.constraint(equalTo: taskTitle.heightAnchor, multiplier: 1),
       submit.widthAnchor.constraint(equalTo: taskTitle.widthAnchor, multiplier: 1)
       ])
-    submit.addTarget(self, action: #selector(enterIntoDatabase(_:)), for: .touchUpInside)
     
   }
   
@@ -85,7 +83,9 @@ class MainViewController: UIViewController {
   }
   
   @objc func openSideMenu() {
-    present(SideMenuManager.menuLeftNavigationController!, animated: true, completion: nil)
+    if let menuController = SideMenuManager.menuLeftNavigationController {
+      present(menuController, animated: true, completion: nil)
+    }
   }
   
   

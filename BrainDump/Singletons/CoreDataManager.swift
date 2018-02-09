@@ -76,7 +76,7 @@ class CoreDataManager {
     }
   }
   
-  //MARK: TESTING
+  //MARK: TESTING or maybe uploading
   func deleteTasksData() {
     let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "Task")
     let deleteRequest = NSBatchDeleteRequest(fetchRequest: fetchRequest)
